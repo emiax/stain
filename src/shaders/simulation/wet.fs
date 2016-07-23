@@ -1,5 +1,3 @@
-precision mediump float;
-
 uniform sampler2D water;
 uniform sampler2D wet;
 uniform sampler2D dry;

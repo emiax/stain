@@ -5,17 +5,21 @@ import Shader from './shader'
 import ShaderProgram from './shaderprogram'
 import ShaderPass from './shaderPass'
 import Buffer from './buffer'
+import glslPre from './glslpreprocessor'
 
 let vsSource = require('./shaders/simulation/simulation.vs');
 let waterFsSource = require('./shaders/simulation/water.fs');
 let wetFsSource = require('./shaders/simulation/wet.fs');
 let dryFsSource = require('./shaders/simulation/dry.fs');
 
+vsSource = glslPre(vsSource);
+
 let fsSources = {
-  water: waterFsSource,
-  wet: wetFsSource,
-  dry: dryFsSource
+  water: glslPre(waterFsSource),
+  wet: glslPre(wetFsSource),
+  dry: glslPre(dryFsSource)
 };
+
 
 class Simulator {
   constructor(opt) {

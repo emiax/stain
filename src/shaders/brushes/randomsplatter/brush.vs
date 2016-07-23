@@ -1,5 +1,3 @@
-precision mediump float;
-
 uniform vec2 pixelSize;
 
 attribute vec2 texCoord;

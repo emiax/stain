@@ -1,5 +1,3 @@
-precision mediump float;
-
 attribute vec2 texCoord;
 attribute vec2 force;
 

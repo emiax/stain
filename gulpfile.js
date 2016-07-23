@@ -14,7 +14,7 @@ var browserify = require('browserify'),
 gulp.task('default', function() {
   return browserify({ 'entries': ['src/header.js'], 'debug' : true })
     .transform(stringify, {
-        appliesTo: { includeExtensions: ['.vs', '.fs'] },
+        appliesTo: { includeExtensions: ['.vs', '.fs', '.glsl'] },
         minify: true
     })
     .transform("babelify", {presets: ["es2015"]})
