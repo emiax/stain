@@ -4,7 +4,8 @@ import DebugRenderer from './debugrenderer'
 import {vec2} from 'gl-matrix';
 import Stats from 'stats-js'
 
-import RandomSplatterBrush from './randomsplatterbrush';
+import RandomStainBrush from './randomstainbrush';
+import StainBrush from './stainbrush';
 
 
 
@@ -14,20 +15,30 @@ class HeaderAnimation {
     let context = this._context = new WebglContext(gl);
     this._simulator = new Simulator({
       context: context,
-      size: vec2.fromValues(1024, 1024)
+      size: vec2.fromValues(1920, 1080)
     });
 
     this._simulator.setTextureCoordinatesAndForces(
-      [ 0.5, 1.0, 
-           0,  0,
-           1.0, 0
+      [ 0.0, 1.0, 
+        0,  0,
+        1.0, 0,
+
+        0,  1.0,
+        1.0, 0,
+        1.0, 1.0
         ],
         [ 0, -1, 
+            0, -1, 
+            0, -1,
+            0, -1, 
             0, -1, 
             0, -1,
         ]
       /*[ 0, -1, 
             Math.sqrt(2), Math.sqrt(2),
+            -Math.sqrt(2), Math.sqrt(2),
+            Math.sqrt(2), Math.sqrt(2),
+            -Math.sqrt(2), Math.sqrt(2),
             -Math.sqrt(2), Math.sqrt(2)
         ]*/
     );
@@ -46,11 +57,16 @@ class HeaderAnimation {
     this._stats.domElement.style.top = '0'
 
 
-    this._randomBrush = new RandomSplatterBrush({
+    this._randomBrush = new RandomStainBrush({
         simulator: this._simulator
     });
 
-    this._splatTimer = 0;
+    this._stainBrush = new StainBrush({
+        simulator: this._simulator
+    });
+
+    this._stainTimer = 0;
+    this._stainPosition = vec2.fromValues(200, 1);
   }
 
   start() {
@@ -68,11 +84,27 @@ class HeaderAnimation {
     if (this._status === 'on') {
       this._stats.begin();
 
-      if (this._splatTimer < 0) {
+      if (this._stainTimer < 0) {
         this._randomBrush.apply();
-        this._splatTimer = 1 + Math.random() * 2;
+        this._stainTimer = 10 + Math.random() * 20;
       }
-      this._splatTimer--;
+
+      let stainPosition = vec2.clone(this._stainPosition);
+      stainPosition[0] += Math.random() * 200 - 100;
+      stainPosition[1] += Math.random() * 200 - 100;
+      this._stainBrush.apply(stainPosition);
+      this._stainPosition[0] *= 1.02;
+      this._stainPosition[1] += 3;
+
+      if (this._stainPosition[0] > 1920) {
+        this._stainPosition[0] = 2;
+      }
+
+      if (this._stainPosition[1] > 1080) {
+        this._stainPosition[1] = 2;
+      }
+
+      this._stainTimer--;
 
       this._simulator.step();
       this._debugRenderer.render(this._simulator);

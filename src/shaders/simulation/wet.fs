@@ -3,6 +3,7 @@ uniform sampler2D wet;
 uniform sampler2D dry;
 
 uniform float dryingSpeed;
+uniform float diffusionFactor;
 
 uniform vec2 pixelSize;
 varying vec2 gravity;
@@ -38,5 +39,14 @@ void main() {
   vec4 wetAmount = dryOut(wetSampleHere) * (1.0 - advectionFactor(waterSampleHere))
                  + dryOut(wetSampleAbove) * advectionFactor(waterSampleAbove);
   
+  vec4 left = texture2D(wet, textureCoordinates + pixelSize * vec2(-1.0, 0.0));
+  vec4 right = texture2D(wet, textureCoordinates + pixelSize * vec2(1.0, 0.0));
+  vec4 down = texture2D(wet, textureCoordinates + pixelSize * vec2(0.0, -1.0));
+  vec4 up = texture2D(wet, textureCoordinates + pixelSize * vec2(0.0, 1.0));
+
+  float paintDiffusionFactor = waterSampleHere * diffusionFactor;
+
+  wetAmount = (1.0 - paintDiffusionFactor) * wetAmount + paintDiffusionFactor * 0.25 * (left + right + down + up);
+
     gl_FragColor = wetAmount;
 }

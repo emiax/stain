@@ -3,9 +3,13 @@ import Shader from './shader';
 import ShaderProgram from './shaderprogram';
 import ShaderPass from './shaderpass';
 import {vec2} from 'gl-matrix';
+import glslPre from './glslpreprocessor';
 
 let vertexShaderSource = require('./shaders/debug.vs')
 let fragmentShaderSource = require('./shaders/debug.fs')
+let noise2D = require('./../ext/webgl-noise/src/noise2D.glsl');
+
+
 
 class DebugRenderer {
   constructor(opt) {
@@ -31,14 +35,14 @@ class DebugRenderer {
     let debugVertexShader = new Shader({
       context: context,
       type: 'vertex', 
-      source: vertexShaderSource
+      source: glslPre(noise2D, vertexShaderSource)
     });
     debugVertexShader.compile();
 
     let debugFragmentShader = new Shader({
       context: context,
       type: 'fragment', 
-      source: fragmentShaderSource
+      source: glslPre(noise2D, fragmentShaderSource)
     });
     debugFragmentShader.compile();
 
