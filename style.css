@@ -3,8 +3,8 @@ html {
 }
 
 header {
-  background-color: #a81c00;
-  color: #000;
+  background-color: #fff;
+  color: #fff;
   text-align: center;
   height: 100vh;
   overflow: hidden;
@@ -12,29 +12,33 @@ header {
   position: relative;
 }
 
+#main-header-canvas-overlay {
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
 header h1 {
   font-weight: 700;
-  font-size: 3em;
+  font-size: 8em;
 }
 
 header p {
   font-weight: 300;
   padding-left: 5em;
   padding-right: 5em;
+  font-size: 2em;
 }
 
 .main-title {
-   
-
   width: 100%;
   position: absolute;
-  bottom: 2em;
+  bottom: 45vh;
   left: 0;
 }
 
-header canvas {
-
-}
 
 h2 {
   font-weight: 700;

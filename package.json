@@ -10,7 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "cdt2d": "^1.0.0",
+    "ease": "^0.1.0",
     "gl-matrix": "^2.3.2",
+    "interpolation": "^1.0.0",
     "stats-js": "^1.0.0-alpha1"
   },
   "devDependencies": {

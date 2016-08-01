@@ -7,6 +7,7 @@ uniform float dryingSpeed;
 uniform vec2 pixelSize;
 varying vec2 gravity;
 varying vec2 textureCoordinates;
+varying vec2 pixelCoordinates;
 
 
 
@@ -26,7 +27,8 @@ vec4 blend(vec4 contrib, vec4 background) {
 
 vec4 dryOut(vec4 wetIn) {
   float amountIn = wetIn.a;
-  float amountOut = max(0.0, amountIn - dryingSpeed);
+  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.25));
+  float amountOut = max(0.0, amountIn - ds);
   if (amountIn > 0.0) {
     float remainFactor = amountOut / amountIn;
     return wetIn * remainFactor;
@@ -43,6 +45,8 @@ void main() {
 
   vec4 remainingWet = dryOut(wetSample);
   vec4 dried = wetSample - remainingWet;
+  dried = clamp(dried, vec4(0.0), vec4(1.0));
+  drySample = clamp(drySample, vec4(0.0), vec4(1.0));
 
     gl_FragColor = blend(dried, drySample);
 }

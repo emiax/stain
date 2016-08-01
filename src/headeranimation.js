@@ -1,6 +1,6 @@
 import WebglContext from './webglcontext'
 import Simulator from './simulator';
-import DebugRenderer from './debugrenderer'
+import HeaderRenderer from './headerrenderer'
 import {vec2} from 'gl-matrix';
 import Stats from 'stats-js'
 
@@ -9,45 +9,40 @@ import StainBrush from './stainbrush';
 
 
 
-
 class HeaderAnimation {
   constructor(gl, w, h) {
+    let textureSize = vec2.fromValues(1920, 1080);
+
     let context = this._context = new WebglContext(gl);
     this._simulator = new Simulator({
       context: context,
-      size: vec2.fromValues(1920, 1080)
+      size: textureSize
     });
 
     this._simulator.setTextureCoordinatesAndForces(
       [ 0.0, 1.0, 
         0,  0,
         1.0, 0,
-
         0,  1.0,
         1.0, 0,
         1.0, 1.0
         ],
         [ 0, -1, 
-            0, -1, 
-            0, -1,
-            0, -1, 
-            0, -1, 
-            0, -1,
+          0, -1, 
+          0, -1,
+          0, -1, 
+          0, -1, 
+          0, -1,
         ]
-      /*[ 0, -1, 
-            Math.sqrt(2), Math.sqrt(2),
-            -Math.sqrt(2), Math.sqrt(2),
-            Math.sqrt(2), Math.sqrt(2),
-            -Math.sqrt(2), Math.sqrt(2),
-            -Math.sqrt(2), Math.sqrt(2)
-        ]*/
     );
+
 
     this._simulator.init();
 
-    this._debugRenderer = new DebugRenderer({
+    this._headerRenderer = new HeaderRenderer({
       context: context,
-      size: vec2.fromValues(w, h)
+      textureSize: textureSize,
+      headerSize: vec2.fromValues(w, h)
     });
     
     this._stats = new Stats();
@@ -86,13 +81,13 @@ class HeaderAnimation {
 
       if (this._stainTimer < 0) {
         this._randomBrush.apply();
-        this._stainTimer = 10 + Math.random() * 20;
+        this._stainTimer = 20 + Math.random() * 2;
       }
 
       let stainPosition = vec2.clone(this._stainPosition);
       stainPosition[0] += Math.random() * 200 - 100;
       stainPosition[1] += Math.random() * 200 - 100;
-      this._stainBrush.apply(stainPosition);
+      //this._stainBrush.apply(stainPosition);
       this._stainPosition[0] *= 1.02;
       this._stainPosition[1] += 3;
 
@@ -107,7 +102,7 @@ class HeaderAnimation {
       this._stainTimer--;
 
       this._simulator.step();
-      this._debugRenderer.render(this._simulator);
+      this._headerRenderer.render(this._simulator);
       //console.log('sim step!');
       requestAnimationFrame(this.step.bind(this));
       this._stats.end();
@@ -117,7 +112,13 @@ class HeaderAnimation {
   }
 
   setSize(w, h) {
-    this._debugRenderer.setSize(vec2.fromValues(w, h));
+    this._headerRenderer.setHeaderSize(vec2.fromValues(w, h));
+  }
+
+  setScroll(scroll) {
+    let h = window.innerHeight/4;
+    let splashScreenRatio = Math.min(Math.max(0, (h - scroll) / h), 1);
+    this._headerRenderer.setSplashScreenRatio(splashScreenRatio);
   }
 }
 

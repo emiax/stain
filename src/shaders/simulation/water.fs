@@ -13,13 +13,17 @@ varying vec2 textureCoordinates;
 
 
 
-float evaporate(float waterIn) {
+float evaporate(float waterIn, vec2 coords) {
   float waterOut = max(0.0, waterIn - evaporationSpeed);
   return waterOut;
 }
 
 float advectionFactor(float water) {
-  return clamp(smoothstep(0.2, 1.0, water) * 0.8, 0.0, 0.6);
+  return clamp(smoothstep(0.2, 1.0, water), 0.0, 1.0);
+}
+
+float diffusion(float waterA, float waterB) {
+  return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
 }
 
 void main() {
@@ -28,10 +32,11 @@ void main() {
   float waterSampleHere = texture2D(water, textureCoordinates).r;
   float waterSampleAbove = texture2D(water, textureCoordinates - displacement).r;
 
-  float waterHere = evaporate(waterSampleHere);
-  float waterAbove = evaporate(waterSampleAbove);
+  float waterHere = evaporate(waterSampleHere, textureCoordinates);
+  float waterAbove = evaporate(waterSampleAbove, textureCoordinates);
 
-  float waterAmount = waterHere * (1.0 - advectionFactor(waterHere)) + waterAbove * advectionFactor(waterAbove);
+  float waterAmount = waterHere * (1.0 - advectionFactor(waterHere))
+                    + waterAbove * advectionFactor(waterAbove);
 
 
   float left = texture2D(water, textureCoordinates + pixelSize * vec2(-1.0, 0.0)).r;
@@ -39,9 +44,22 @@ void main() {
   float down = texture2D(water, textureCoordinates + pixelSize * vec2(0.0, -1.0)).r;
   float up = texture2D(water, textureCoordinates + pixelSize * vec2(0.0, 1.0)).r;
 
-  float waterDiffusionFactor = diffusionFactor * waterAmount;
-  waterAmount = (1.0 - waterDiffusionFactor) * waterAmount + waterDiffusionFactor * 0.25 * (left + right + down + up);
+  float leftDiffusionFactor = diffusion(waterAmount, left);
+  float rightDiffusionFactor = diffusion(waterAmount, right);
+  float downDiffusionFactor = diffusion(waterAmount, down);
+  float upDiffusionFactor = diffusion(waterAmount, up);
+  float noDiffusionFactor = (1.0 - leftDiffusionFactor - rightDiffusionFactor - downDiffusionFactor - upDiffusionFactor);
 
+  waterAmount = (1.0 - diffusionFactor) * waterAmount +
+              diffusionFactor *
+                (noDiffusionFactor * waterAmount
+                + leftDiffusionFactor * left
+                + rightDiffusionFactor * right
+                + downDiffusionFactor * down
+                + upDiffusionFactor * up);
+
+
+  waterAmount = max(0.0, waterAmount);
 
   gl_FragColor = vec4(waterAmount, 0.0, 0.0, 0.0);
 }

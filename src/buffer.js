@@ -59,6 +59,10 @@ class Buffer {
     return this._type;
   }
 
+  destroy() {
+    this._context.gl().glDeleteBuffer(this._buffer);
+  }
+
 }
 
 module.exports = Buffer;

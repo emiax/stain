@@ -7,6 +7,9 @@ import ShaderPass from './shaderPass'
 import Buffer from './buffer'
 import glslPre from './glslpreprocessor'
 
+
+let noise2D = require('./../ext/webgl-noise/src/noise2D.glsl');
+
 let vsSource = require('./shaders/simulation/simulation.vs');
 let waterFsSource = require('./shaders/simulation/water.fs');
 let wetFsSource = require('./shaders/simulation/wet.fs');
@@ -15,9 +18,9 @@ let dryFsSource = require('./shaders/simulation/dry.fs');
 vsSource = glslPre(vsSource);
 
 let fsSources = {
-  water: glslPre(waterFsSource),
-  wet: glslPre(wetFsSource),
-  dry: glslPre(dryFsSource)
+  water: glslPre(noise2D, waterFsSource),
+  wet: glslPre(noise2D, wetFsSource),
+  dry: glslPre(noise2D, dryFsSource)
 };
 
 
@@ -26,6 +29,7 @@ class Simulator {
     this._context = opt.context;
     this._size = vec2.clone(opt.size);
     this._pingPong = false; // start off in ping state.
+    this._time = 0;
   }
 
   init() {
@@ -125,9 +129,10 @@ class Simulator {
         wet: textures[pingPong].wet,
         dry: textures[pingPong].dry,
         pixelSize: [1/this._size[0], 1/this._size[1]],
-        dryingSpeed: 0.002,
-        evaporationSpeed: 0.01,
-        diffusionFactor: 0.05
+        dryingSpeed: 0.0005,
+        evaporationSpeed: 0.0005,
+        diffusionFactor: 0.2,
+        time: 0
       },
       program: programs[component],
       attributes: {
@@ -155,9 +160,11 @@ class Simulator {
   }
 
   step() {
+    
     let pingPong = this._pingPong;
     Object.keys(this._shaderPasses[pingPong]).forEach((component) => {
       let shaderPass = this._shaderPasses[pingPong][component];
+      shaderPass.setUniform('time', this._time++);
       shaderPass.apply();
     });
     this.pingPong();

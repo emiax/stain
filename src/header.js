@@ -41,6 +41,11 @@ function initHeader() {
       let size = updateCanvasSize(headerAnimation);
       headerAnimation.setSize(size[0], size[1]);
     });
+
+    window.addEventListener('scroll', function (data) {
+      headerAnimation.setScroll(document.documentElement.scrollTop || document.body.scrollTop);
+    });
+
     headerAnimation.start();
   }
 }
