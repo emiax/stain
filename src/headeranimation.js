@@ -5,6 +5,7 @@ import {vec2} from 'gl-matrix';
 import Stats from 'stats-js'
 
 import RandomStainBrush from './randomstainbrush';
+import ImageStainBrush from './imagestainbrush';
 import StainBrush from './stainbrush';
 
 
@@ -48,19 +49,22 @@ class HeaderAnimation {
     this._stats = new Stats();
     //this._stats.setMode( 1 );
     document.body.appendChild(this._stats.domElement );
-    this._stats.domElement.style.position = 'absolute';
-    this._stats.domElement.style.top = '0'
+    this._stats.domElement.style.position = 'fixed';
+    this._stats.domElement.style.bottom = '0'
 
 
     this._randomBrush = new RandomStainBrush({
         simulator: this._simulator
     });
 
-    this._stainBrush = new StainBrush({
-        simulator: this._simulator
+    this._imageStainBrush = new ImageStainBrush({
+        context: this._context,
+        simulator: this._simulator,
+        imageSource: 'input.png'
     });
 
     this._stainTimer = 0;
+    this._nStains = 0;
     this._stainPosition = vec2.fromValues(200, 1);
   }
 
@@ -79,10 +83,30 @@ class HeaderAnimation {
     if (this._status === 'on') {
       this._stats.begin();
 
-      if (this._stainTimer < 0) {
-        this._randomBrush.apply();
-        this._stainTimer = 20 + Math.random() * 2;
+      let size = Math.random() * 20;
+      let amount = 0.8;
+      let timerCoefficient = 1;
+      if (this._nStains < 500) {
+        size *= 2;
+        amount *= 0.5;
+        timerCoefficient * 2.0;
       }
+      if (this._nStains < 100 && this._nStains % 3 === 0) {
+        size *= 2;
+        amount *= 0.5;
+        timerCoefficient * 2.0;
+      }
+
+
+      if (this._stainTimer < 0) {
+        if (this._imageStainBrush.isReady()) {
+          this._imageStainBrush.apply(size, amount);
+          this._nStains++;
+        }
+        this._stainTimer = Math.random() * 8 * timerCoefficient;
+      }
+
+
 
       let stainPosition = vec2.clone(this._stainPosition);
       stainPosition[0] += Math.random() * 200 - 100;
@@ -116,8 +140,9 @@ class HeaderAnimation {
   }
 
   setScroll(scroll) {
-    let h = window.innerHeight/4;
-    let splashScreenRatio = Math.min(Math.max(0, (h - scroll) / h), 1);
+    let distance = window.innerHeight/8;
+    let start = window.innerHeight/8;
+    let splashScreenRatio = Math.min(Math.max(0, (distance - scroll + start) / distance), 1);
     this._headerRenderer.setSplashScreenRatio(splashScreenRatio);
   }
 }

@@ -129,8 +129,8 @@ class Simulator {
         wet: textures[pingPong].wet,
         dry: textures[pingPong].dry,
         pixelSize: [1/this._size[0], 1/this._size[1]],
-        dryingSpeed: 0.0005,
-        evaporationSpeed: 0.0005,
+        dryingSpeed: 0.001,
+        evaporationSpeed: 0.001,
         diffusionFactor: 0.2,
         time: 0
       },

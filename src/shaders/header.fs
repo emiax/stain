@@ -9,6 +9,7 @@ varying vec2 pixelCoordinates;
 uniform vec2 headerPixelSize;
 uniform vec2 texturePixelSize;
 
+uniform float splashScreenRatio;
 
 /**
  * Blend in src behind dst
@@ -42,16 +43,18 @@ void main() {
 
   diff = clamp(0.2 * diff, 0.0, 0.2);
 
-  vec4 bg1 = vec4(0.86, 0.86, 0.86, 1.0);
+/*  vec4 bg1 = vec4(0.86, 0.86, 0.86, 1.0);
   vec4 bg2 = vec4(0.88, 0.88, 0.88, 1.0);
 
   vec4 bg = mix(bg1, bg2, snoise(pixelCoordinates * 0.005)
                   + 0.5 * snoise(pixelCoordinates * 0.01)
-                  + 0.25 * snoise(pixelCoordinates * 0.02));
+                  + 0.25 * snoise(pixelCoordinates * 0.02));*/
 
 
-  //bg = vec4(0.1, 0.1, 0.1, 1.0);
-  bg = vec4(0.9, 0.9, 0.9, 1.0);
+  vec4 bg1 = vec4(1.0, 1.0, 1.0, 1.0);
+  vec4 bg2 = vec4(0.1, 0.1, 0.1, 1.0);
+
+  vec4 bg = mix(bg1, bg2, splashScreenRatio);
 
 
 
@@ -59,6 +62,10 @@ void main() {
   vec4 waterContribution = vec4(1.0, 1.0, 1.0, diff);
   vec4 dryContribution = drySample;
   vec4 wetContribution = wetSample;
+
+  if (wetContribution.a > 1.0) {
+    wetContribution /= wetContribution.a;
+  }
 
   //dryContribution *= 3.0;
   //wetContribution *= 3.0;
@@ -69,10 +76,11 @@ void main() {
   vec4 result = blend(bg, vec4(0.0));
   result = blend(dryContribution, result);
   result = blend(wetContribution, result);
-  result = blend(premult(waterContribution), result);
+  //result = blend(premult(waterContribution), result);
 
   //result = vec4(waterSampleCenter.r * 0.5, waterSampleCenter.r - 1.0, waterSampleCenter.r - 2.0, 1.0);
   //result = vec4(vec3(waterSampleLeft.r), 1.0);
+  //result = vec4(vec3(wetSample), 1.0);
   //result = vec4(vec3(wetSample), 1.0);
 
 

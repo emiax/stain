@@ -19,7 +19,7 @@ float evaporate(float waterIn, vec2 coords) {
 }
 
 float advectionFactor(float water) {
-  return clamp(smoothstep(0.2, 1.0, water), 0.0, 1.0);
+  return clamp(smoothstep(0.2, 0.8, water) * 0.8, 0.0, 0.8);
 }
 
 float diffusion(float waterA, float waterB) {

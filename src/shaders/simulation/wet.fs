@@ -13,7 +13,7 @@ varying vec2 pixelCoordinates;
 uniform float time;
 
 float advectionFactor(float water) {
-  return clamp(smoothstep(0.2, 1.0, water) * 0.8, 0.0, 0.6);
+  return clamp(smoothstep(0.2, 0.8, water) * 0.8, 0.0, 1.0);
 }
 
 vec4 dryOut(vec4 wetIn) {

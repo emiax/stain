@@ -25,8 +25,8 @@ class HeaderRenderer {
 
      this._triangulator = new Triangulator();
 
-    let polygon = [-1,-1, 1,-1, 1,1, -1,1, -0.5,-0.5, 0.5,-0.5, 0.5,0.5, -0.5,0.5];
-    let vertices = this._triangulator.triangulate(polygon, [4]);
+    let polygon = [-1,-1, 1,-1, 1,1, -1,1];
+    let vertices = this._triangulator.triangulate(polygon);
 
     console.log(vertices);
 
@@ -80,26 +80,13 @@ class HeaderRenderer {
       this._shaderPass.setUniform(key, textures[key]);
     });
 
-    console.log(this._splashScreenRatio)
+    //console.log(this._splashScreenRatio)
     let ratio = this._splashScreenRatio;
     ratio = smoothstep(0, 1, ratio);
-    
-    let boxSizeSplashScreen = [0, 0];
-    let boxSizeHeader = [this._headerSize[0]/2, this._headerSize[1]/2];
-
-    let boxSize = [lerp(boxSizeHeader[0], boxSizeSplashScreen[0], ratio),
-                   lerp(boxSizeHeader[1], boxSizeSplashScreen[1], ratio)];
-
-    let strokeWidthSplashScreen = Math.max(this._headerSize[0], this._headerSize[1]);
-    let strokeWidthHeader = 100;
-    let strokeWidth = lerp(strokeWidthHeader, strokeWidthSplashScreen, ratio);
-
 
     this._shaderPass.setUniform('texturePixelSize', [1/this._textureSize[0], 1/this._textureSize[1]]);
-    this._shaderPass.setUniform('headerPixelSize', [1/this._headerSize[0], 1/this._headerSize[1]]);
-    this._shaderPass.setUniform('center', [this._headerSize[0]/2, this._headerSize[1]/2]);
-    this._shaderPass.setUniform('boxSize', boxSize);
-    this._shaderPass.setUniform('strokeWidth', strokeWidth);
+    //this._shaderPass.setUniform('headerPixelSize', [1/this._headerSize[0], 1/this._headerSize[1]]);
+    this._shaderPass.setUniform('splashScreenRatio', ratio);
     this._shaderPass.apply();
   }
 

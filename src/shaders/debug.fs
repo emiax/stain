@@ -62,7 +62,7 @@ void main() {
   result = blend(premult(waterContribution), result);
 
   //result = vec4(waterSampleCenter.r * 0.5, waterSampleCenter.r - 1.0, waterSampleCenter.r - 2.0, 1.0);
-
+  result = vec4(wetSample.rgb, 1.0);
 
   gl_FragColor = result;
 }

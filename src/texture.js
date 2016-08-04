@@ -11,6 +11,7 @@ class Texture {
     this._format = opt.format;
     this._precision = opt.precision;
     this._texture = null;
+    this._image = opt.image;
   }
   /**
    * Return the id of this texture.
@@ -41,12 +42,12 @@ class Texture {
    * Allocate texture on GPU.
    */
   allocate() {
-    var gl = this._context.gl();
-    var glTexture = gl.createTexture();
+    let gl = this._context.gl();
+    let glTexture = gl.createTexture();
 
-    var glInternalFormat = this.glInternalFormat();
-    var glFormat = this.glFormat();
-    var glPrecision = this.glPrecision();
+    let glInternalFormat = this.glInternalFormat();
+    let glFormat = this.glFormat();
+    let glPrecision = this.glPrecision();
 
     if (glPrecision === gl.FLOAT) {
       var floatTextures = gl.getExtension('OES_texture_float');
@@ -61,9 +62,15 @@ class Texture {
       }
     }
 
-    
+    let image = this._image;
+
     gl.bindTexture(gl.TEXTURE_2D, glTexture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, this._size[0], this._size[1], 0, glFormat, glPrecision, null);
+    if (image === undefined) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, this._size[0], this._size[1], 0, glFormat, glPrecision, null);
+    } else {
+      console.log('test?', image);
+      gl.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, glFormat, glPrecision, image);
+    }
     
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
