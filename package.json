@@ -11,7 +11,7 @@
     "name" : "Erik Sandrén",
     "email" : "erik@hackerman.se",
     "url" : "http://hackerman.se/"
-  }]
+  }],
   "license": "MIT",
   "dependencies": {
     "cdt2d": "^1.0.0",
