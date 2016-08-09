@@ -7,6 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Emil Axelsson",
+  "contributors": [{
+    "name" : "Erik Sandrén",
+    "email" : "erik@hackerman.se",
+    "url" : "http://hackerman.se/"
+  }],
   "license": "MIT",
   "dependencies": {
     "cdt2d": "^1.0.0",
