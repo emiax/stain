@@ -1,7 +1,7 @@
 {
-  "name": "penta",
+  "name": "stains",
   "version": "1.0.0",
-  "description": "Free time javascripting",
+  "description": "WebGL aquarelle library",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

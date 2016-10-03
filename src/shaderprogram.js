@@ -35,9 +35,11 @@ class ShaderProgram {
 
     for (var i = 0; i < nUniforms; i++) {
       var activeInfo = gl.getActiveUniform(this._shaderProgram, i);
-      this._uniforms[activeInfo.name] = new ActiveInfo({
+      let name = activeInfo.name.replace(/\[.*\]/, ''); // remove indexing from uniform name.
+      
+      this._uniforms[name] = new ActiveInfo({
         location: gl.getUniformLocation(this._shaderProgram, activeInfo.name),
-        name: activeInfo.name,
+        name: name,
         size: activeInfo.size,
         type: activeInfo.type
       });
@@ -67,6 +69,7 @@ class ShaderProgram {
   setUniform(name, value) {
     let gl = this._context.gl();
     const activeInfo = this._uniforms[name];
+
     if (activeInfo === undefined) {
       if (!this._suppressWarnings) {
         console.warn("no uniform with name " + name);
@@ -99,21 +102,21 @@ class ShaderProgram {
         if (size === 1) {
           gl.uniform2f(location, value[0], value[1]);
         } else {
-          gl.uniform2fv(location, size, value);
+          gl.uniform2fv(location, value);
         }
         break;
       case gl.FLOAT_VEC3:
         if (size === 1) {
           gl.uniform3f(location, value[0], value[1], value[2]);
         } else {
-          gl.uniform3fv(location, size, value);
+          gl.uniform3fv(location, value);
         }
         break;
       case gl.FLOAT_VEC4:
         if (size === 1) {
           gl.uniform4f(location, value[0], value[1], value[2], value[3]);
         } else {
-          gl.uniform4fv(location, size, value);
+          gl.uniform4fv(location, value);
         }
         break;
       case gl.INT:
@@ -124,21 +127,21 @@ class ShaderProgram {
         if (size === 1) {
           gl.uniform2i(location, value[0], value[1]);
         } else {
-          gl.uniform2iv(location, size, value);
+          gl.uniform2iv(location, value);
         }
         break;
       case gl.INT_VEC3:
         if (size === 1) {
           gl.uniform3i(location, value[0], value[1], value[2]);
         } else {
-          gl.uniform3iv(location, size, value);
+          gl.uniform3iv(location, value);
         }
         break;
       case gl.INT_VEC4:
         if (size === 1) {
           gl.uniform4i(location, value[0], value[1], value[2], value[3]);
         } else {
-          gl.uniform4iv(location, size, value);
+          gl.uniform4iv(location, value);
         }
         break;
       case gl.UNSIGNED_INT:
