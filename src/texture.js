@@ -1,6 +1,6 @@
 import {vec2} from 'gl-matrix';
-var nextId = 0;
 
+var nextId = 0;
 
 class Texture {
 

@@ -7,21 +7,19 @@ import ShaderPass from './shaderPass';
 import Buffer from './buffer';
 import glslPre from './glslpreprocessor';
 
+import noise2D from '../ext/webgl-noise/src/noise2D.glsl';
+import vsSource from './shaders/simulation/simulation.vs';
+import waterFsSource from './shaders/simulation/water.fs';
+import wetFsSource from './shaders/simulation/wet.fs';
+import dryFsSource from './shaders/simulation/dry.fs';
 
-let noise2D = require('../ext/webgl-noise/src/noise2D.glsl');
-let vsSource = require('./shaders/simulation/simulation.vs');
-let waterFsSource = require('./shaders/simulation/water.fs');
-let wetFsSource = require('./shaders/simulation/wet.fs');
-let dryFsSource = require('./shaders/simulation/dry.fs');
-
-vsSource = glslPre(vsSource);
+let vsSourceWithDeps = glslPre(vsSource);
 
 let fsSources = {
   water: glslPre(noise2D, waterFsSource),
   wet: glslPre(noise2D, wetFsSource),
   dry: glslPre(noise2D, dryFsSource)
 };
-
 
 class Simulator {
   constructor(opt) {
@@ -44,7 +42,7 @@ class Simulator {
     let vertexShader = new Shader({
       context: context,
       type: 'vertex',
-      source: vsSource,
+      source: vsSourceWithDeps,
     });
     vertexShader.compile();
 

@@ -3,12 +3,12 @@ import EventEmitter from './eventemitter';
 import Texture from './texture';
 import {vec2} from 'gl-matrix';
 
-let noise2D = require('./../ext/webgl-noise/src/noise2D.glsl');
-let vsSource = require('./shaders/brushes/imagestain/brush.vs');
-let waterFsSource = require('./shaders/brushes/imagestain/water.fs');
-let wetFsSource = require('./shaders/brushes/imagestain/wet.fs');
-let dryFsSource = require('./shaders/brushes/imagestain/dry.fs');
-let splat = require('./shaders/brushes/imagestain/splat.glsl');
+import noise2D from './../ext/webgl-noise/src/noise2D.glsl';
+import vsSource from './shaders/brushes/imagestain/brush.vs';
+import waterFsSource from './shaders/brushes/imagestain/water.fs';
+import wetFsSource from './shaders/brushes/imagestain/wet.fs';
+import dryFsSource from './shaders/brushes/imagestain/dry.fs';
+import splat = './shaders/brushes/imagestain/splat.glsl';
 
 
 

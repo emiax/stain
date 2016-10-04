@@ -5,10 +5,9 @@ import ShaderPass from './shaderpass';
 import {vec2} from 'gl-matrix';
 import glslPre from './glslpreprocessor';
 
-let vertexShaderSource = require('./shaders/debug.vs')
-let fragmentShaderSource = require('./shaders/debug.fs')
-let noise2D = require('./../ext/webgl-noise/src/noise2D.glsl');
-
+import vertexShaderSource from './shaders/debug.vs';
+import fragmentShaderSource from './shaders/debug.fs';
+import noise2D from require('./../ext/webgl-noise/src/noise2D.glsl';
 
 
 class DebugRenderer {
