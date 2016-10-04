@@ -1,14 +1,14 @@
+import Texture from './texture';
 import {vec2} from 'gl-matrix';
-import Texture from './texture'
-import Framebuffer from './framebuffer'
-import Shader from './shader'
-import ShaderProgram from './shaderprogram'
-import ShaderPass from './shaderPass'
-import Buffer from './buffer'
-import glslPre from './glslpreprocessor'
+import Framebuffer from './framebuffer';
+import Shader from './shader';
+import ShaderProgram from './shaderprogram';
+import ShaderPass from './shaderPass';
+import Buffer from './buffer';
+import glslPre from './glslpreprocessor';
 
 
-let noise2D = require('./../ext/webgl-noise/src/noise2D.glsl');
+let noise2D = require('../ext/webgl-noise/src/noise2D.glsl');
 
 let vsSource = require('./shaders/simulation/simulation.vs');
 let waterFsSource = require('./shaders/simulation/water.fs');
