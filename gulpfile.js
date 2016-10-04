@@ -11,7 +11,7 @@ var browserify = require('browserify'),
     watch = require('gulp-watch');
 
 gulp.task('default', function() {
-  return browserify({ 'entries': ['src/main.js'], 'debug' : true })
+  return browserify({ 'entries': ['src/simulator.js'], 'debug' : true })
     .transform(stringify, {
         appliesTo: { includeExtensions: ['.vs', '.fs', '.glsl'] },
         minify: true

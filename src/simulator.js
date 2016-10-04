@@ -9,7 +9,6 @@ import glslPre from './glslpreprocessor';
 
 
 let noise2D = require('../ext/webgl-noise/src/noise2D.glsl');
-
 let vsSource = require('./shaders/simulation/simulation.vs');
 let waterFsSource = require('./shaders/simulation/water.fs');
 let wetFsSource = require('./shaders/simulation/wet.fs');

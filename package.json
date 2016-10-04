@@ -29,5 +29,11 @@
     "stringify": "^5.1.0",
     "vinyl-source-stream": "^1.1.0"
   },
-  "browserify": { "transform": [["babelify", { "presets": ["es2015"] }]] }
+  "browserify": {
+    "transform": [["babelify", { "presets": ["es2015"] }],
+                  ["stringify", {
+        "appliesTo": { "includeExtensions": [".vs", ".fs", ".glsl"] },
+        "minify": true
+    }]]
+  }
 }
