@@ -1,18 +1,16 @@
 import Brush from './brush';
-import EventEmitter from './eventemitter';
-import Texture from './texture';
+import EventEmitter from '../eventemitter';
+import Texture from '../texture';
 import {vec2} from 'gl-matrix';
 
-import noise2D from './../ext/webgl-noise/src/noise2D.glsl';
-import vsSource from './shaders/brushes/imagestain/brush.vs';
-import waterFsSource from './shaders/brushes/imagestain/water.fs';
-import wetFsSource from './shaders/brushes/imagestain/wet.fs';
-import dryFsSource from './shaders/brushes/imagestain/dry.fs';
-import splat = './shaders/brushes/imagestain/splat.glsl';
+import noise2D from '../../ext/webgl-noise/src/noise2D.glsl';
+import vsSource from '../shaders/brushes/imagestain/brush.vs';
+import waterFsSource from '../shaders/brushes/imagestain/water.fs';
+import wetFsSource from '../shaders/brushes/imagestain/wet.fs';
+import dryFsSource from '../shaders/brushes/imagestain/dry.fs';
+import splat from '../shaders/brushes/imagestain/splat.glsl';
 
-
-
-import glslPre from './glslpreprocessor';
+import glslPre from '../glslpreprocessor';
 
 class ImageStainBrush {
   constructor(opt) {

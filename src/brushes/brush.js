@@ -1,6 +1,6 @@
-import Shader from './shader'
-import ShaderProgram from './shaderprogram'
-import ShaderPass from './shaderpass'
+import Shader from '../shader'
+import ShaderProgram from '../shaderprogram'
+import ShaderPass from '../shaderpass'
 
 
 class Brush {

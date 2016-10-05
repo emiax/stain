@@ -1,15 +1,15 @@
 import Brush from './brush';
 
-let noise2D = require('./../ext/webgl-noise/src/noise2D.glsl');
+let noise2D = require('../../ext/webgl-noise/src/noise2D.glsl');
 
-let vsSource = require('./shaders/brushes/stain/brush.vs');
-let waterFsSource = require('./shaders/brushes/stain/water.fs');
-let wetFsSource = require('./shaders/brushes/stain/wet.fs');
-let dryFsSource = require('./shaders/brushes/stain/dry.fs');
-let splat = require('./shaders/brushes/stain/splat.glsl');
+let vsSource = require('../shaders/brushes/stain/brush.vs');
+let waterFsSource = require('../shaders/brushes/stain/water.fs');
+let wetFsSource = require('../shaders/brushes/stain/wet.fs');
+let dryFsSource = require('../shaders/brushes/stain/dry.fs');
+let splat = require('../shaders/brushes/stain/splat.glsl');
 
 
-import glslPre from './glslpreprocessor';
+import glslPre from '../glslpreprocessor';
 
 class RandomStainBrush {
   constructor(opt) {
