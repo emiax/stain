@@ -68,7 +68,6 @@ class Texture {
     if (image === undefined) {
       gl.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, this._size[0], this._size[1], 0, glFormat, glPrecision, null);
     } else {
-      console.log('test?', image);
       gl.texImage2D(gl.TEXTURE_2D, 0, glInternalFormat, glFormat, glPrecision, image);
     }
     

@@ -1,6 +1,4 @@
 uniform sampler2D water;
-uniform sampler2D wet;
-uniform sampler2D dry;
 
 uniform float dryingSpeed;
 uniform float evaporationSpeed;
@@ -19,11 +17,13 @@ float evaporate(float waterIn, vec2 coords) {
 }
 
 float advectionFactor(float water) {
-  return clamp(smoothstep(0.2, 0.8, water) * 0.8, 0.0, 0.8);
+  //water = clamp(water, 0.0, 1.0);
+  return smoothstep(0.2, 0.8, water) * 0.8;
 }
 
 float diffusion(float waterA, float waterB) {
-  return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
+  //return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
+  return waterA * waterB;
 }
 
 void main() {
@@ -60,6 +60,7 @@ void main() {
 
 
   waterAmount = max(0.0, waterAmount);
+  waterAmount = min(0.5, waterAmount);
 
   gl_FragColor = vec4(waterAmount, 0.0, 0.0, 0.0);
 }

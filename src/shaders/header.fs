@@ -9,7 +9,6 @@ varying vec2 pixelCoordinates;
 uniform vec2 headerPixelSize;
 uniform vec2 texturePixelSize;
 
-uniform float splashScreenRatio;
 
 /**
  * Blend in src behind dst
@@ -52,11 +51,9 @@ void main() {
 
 
   vec4 bg1 = vec4(1.0, 1.0, 1.0, 1.0);
-  vec4 bg2 = vec4(0.1, 0.1, 0.1, 1.0);
+  vec4 bg2 = vec4(0.05, 0.05, 0.05, 1.0);
 
-  vec4 bg = mix(bg1, bg2, splashScreenRatio);
-
-
+  vec4 bg = vec4(0.98, 0.98, 0.98, 1.0);
 
   //vec4 bg = vec4(0.0, 0.0, 0.0, 1.0);
   vec4 waterContribution = vec4(1.0, 1.0, 1.0, diff);

@@ -1,4 +1,3 @@
-uniform sampler2D water;
 uniform sampler2D wet;
 uniform sampler2D dry;
 
@@ -27,7 +26,7 @@ vec4 blend(vec4 contrib, vec4 background) {
 
 vec4 dryOut(vec4 wetIn) {
   float amountIn = wetIn.a;
-  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.25));
+  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
   float amountOut = max(0.0, amountIn - ds);
   if (amountIn > 0.0) {
     float remainFactor = amountOut / amountIn;

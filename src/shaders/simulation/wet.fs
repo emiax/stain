@@ -1,6 +1,5 @@
 uniform sampler2D water;
 uniform sampler2D wet;
-uniform sampler2D dry;
 
 uniform float dryingSpeed;
 uniform float diffusionFactor;
@@ -13,22 +12,25 @@ varying vec2 pixelCoordinates;
 uniform float time;
 
 float advectionFactor(float water) {
-  return clamp(smoothstep(0.2, 0.8, water) * 0.8, 0.0, 1.0);
+  //water = clamp(water, 0.0, 1.0);
+  return smoothstep(0.2, 0.8, water) * 0.8;
 }
 
 vec4 dryOut(vec4 wetIn) {
   float amountIn = wetIn.a;
-  float amountOut = max(0.0, amountIn - dryingSpeed);
+  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
+  float amountOut = max(0.0, amountIn - ds);
   if (amountIn > 0.0) {
     float remainFactor = amountOut / amountIn;
-    return remainFactor * wetIn;
+    return wetIn * remainFactor;
   } else {
     return wetIn;
   }
 }
 
 float diffusion(float waterA, float waterB) {
-  return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
+  //return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
+  return waterA * waterB;
 }
 
 vec4 addWet(vec4 a, vec4 b) {
