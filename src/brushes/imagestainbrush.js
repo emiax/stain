@@ -74,29 +74,41 @@ class ImageStainBrush {
 
    // console.log(this._inputTexture);
    let stainPositions = [];
+   let stainSizes = [];
 
    let inputX = 0.01 + Math.random() * 0.98;
    let inputY = 0.1 + Math.random() * 0.8;
 
    let nStains = 10;
    for (let i = 0; i < nStains; i++) {
-    
-    let x = inputX + 0.1 * (Math.random() - 0.5);
-    let y = inputY + 0.1 * (Math.random() - 0.5);
-    //let x = inputX + 0.01 * (Math.random() - 0.5);
-    //let y = inputY + 0.01 * (Math.random() - 0.5);
 
+    let r = Math.random() * brushSize;
+    let x = inputX * size[0];
+    let y = inputY * size[1];
 
-    stainPositions.push(x * size[0]);
-    stainPositions.push(y * size[1]);
+    if (r > brushSize * 0.5) {
+      // bigger stains close to the center.
+      x += 3 * brushSize * (Math.random() - 0.5);
+      y += 3 * brushSize * (Math.random() - 0.5);
+    } else {
+      // smaller stains more scattered.
+      x += 10 * brushSize * (Math.random() - 0.5);
+      y += 10 * brushSize * (Math.random() - 0.5);
+    }
+
+    stainPositions.push(x);
+    stainPositions.push(y);
+    stainSizes.push(r);
    }
 
    let typedStainPositions = new Float32Array(stainPositions);
+   let typedStainSizes = new Float32Array(stainSizes);
 
     this._brush.apply({
       //splatPosition: [size[0] * x, size[1] * y],
       splatWater: Math.random() * amount,
       splatSize: brushSize,
+      stainSizes: typedStainSizes,
       inputPosition: [inputX, inputY],
       stainPositions: typedStainPositions,
       //splatColor: color,

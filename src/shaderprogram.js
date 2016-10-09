@@ -86,7 +86,11 @@ class ShaderProgram {
     }
     switch (type) {
       case gl.FLOAT:
-        gl.uniform1f(location, value);
+        if (size == 1) {
+          gl.uniform1f(location, value);
+        } else {
+          gl.uniform1fv(location, value);
+        }
         break;
       case gl.FLOAT_MAT2:
         gl.uniformMatrix2f(location, false, value);
