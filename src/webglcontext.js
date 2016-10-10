@@ -11,6 +11,9 @@ class WebglContext {
   id() {
     return this._id;
   }
+  getExtension(str) {
+    return this._gl.getExtension(str);
+  }
 }
 
 module.exports = WebglContext;

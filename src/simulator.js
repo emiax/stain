@@ -30,12 +30,18 @@ class Simulator {
   }
 
   init() {
-    this.setupTexturesAndFramebuffers();
-    this.setupShaders();
-    this.setupShaderPasses();
+    let gl = this._context.gl();
+    //console.log(gl.getSupportedExtensions().join("\n"));
+
+    return (this.setupTexturesAndFramebuffers('float') || 
+            this.setupTexturesAndFramebuffers('half-float') ||
+            this.setupTexturesAndFramebuffers('byte')) &&
+           this.setupShaders() &&
+           this.setupShaderPasses();
   }
 
   setupShaders() {
+    console.log('setting up shaders');
     let context = this._context;
 
     // create vertex shader object, and compile it
@@ -68,12 +74,17 @@ class Simulator {
       program.link();
 
     });
+    console.log('did setup shaders');
+    return true;
   }
 
   /**
    * Sets up the _textureSets and _framebuffer members.
    */
-  setupTexturesAndFramebuffers() {
+  setupTexturesAndFramebuffers(precision) {
+    console.log('setting up textures and framebuffers');
+
+    let success = true;
     let textures = this._textureSets = {};
     let framebuffers = this._framebufferSets = {};
     // One texture set per ping pong state
@@ -86,17 +97,26 @@ class Simulator {
           context: this._context,
           size: this._size,
           format: 'rgba',
-          precision: 'float'
+          precision: precision
         });
         let fbo = this._framebufferSets[pingPong][component] = new Framebuffer({
           context: this._context
         });
         fbo.attachTexture('color', texture);
+        if (!fbo.isComplete()) {
+          console.warn('Framebuffer NOT complete');      
+          success = false;
+        } else {
+          console.log('Framebuffer is complete!');      
+        }
       });
     });
+    console.log('did setup textures and fbos');
+    return success;
   }
 
   setupShaderPasses() {
+    console.log('setting up shader passes');
     this._shaderPasses = {};
     [false, true].forEach((pingPong) => {
       this._shaderPasses[pingPong] = [
@@ -105,6 +125,8 @@ class Simulator {
         this.createShaderPass(pingPong, 'dry')
       ];
     });
+    console.log('did setup shader passes');
+    return true;
   }
 
   createShaderPass(pingPong, component) {

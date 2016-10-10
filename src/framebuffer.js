@@ -12,7 +12,7 @@ class Framebuffer {
   attachTexture(attachment, texture) {
     let gl = this._context.gl();
 
-    var previousBinding = Framebuffer.currentBinding(this._context);
+    let previousBinding = Framebuffer.currentBinding(this._context);
     this.bind();
 
     let glAttachment = gl.COLOR_ATTACHMENT0;
@@ -38,6 +38,15 @@ class Framebuffer {
 
   bind() {
     Framebuffer.bind(this._context, this);
+  }
+
+  isComplete() {
+    let previousBinding = Framebuffer.currentBinding(this._context);
+    this.bind();
+    let gl = this._context.gl();
+    let status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    Framebuffer.bind(this._context, previousBinding);
+    return status;
   }
 
 }

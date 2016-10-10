@@ -5,6 +5,9 @@ var nextId = 0;
 class Texture {
 
   constructor(opt) {
+    let gl = opt.context.gl();
+    
+
     this._context = opt.context;
     this._id = nextId++;
     this._size = vec2.clone(opt.size);
@@ -48,19 +51,6 @@ class Texture {
     let glInternalFormat = this.glInternalFormat();
     let glFormat = this.glFormat();
     let glPrecision = this.glPrecision();
-
-    if (glPrecision === gl.FLOAT) {
-      var floatTextures = gl.getExtension('OES_texture_float');
-      if (!floatTextures) {
-        console.warn('float textures are not supported');
-      }
-      if (!gl.getExtension("OES_texture_float_linear")) {
-        console.warn("Float textures are not available.");
-      }
-      if (!gl.getExtension("OES_standard_derivatives")) {
-        console.warn("Standard derivatives not available.");
-      }
-    }
 
     let image = this._image;
 
@@ -123,10 +113,21 @@ class Texture {
    * Return the gl enum corresponding to the texture's precision.
    */
   glPrecision() {
-    var gl = this._context.gl();
+    var gl = this._context.gl();    
+
+    let ext = null;
+    let halfFloat = gl.HALF_FLOAT;
+    if (ext = gl.getExtension("OES_texture_half_float")) {
+      if (ext.HALF_FLOAT_OES) halfFloat = ext.HALF_FLOAT_OES;
+    }
+    let float = gl.FLOAT;
+    if (ext = gl.getExtension("OES_texture_float")) {
+      if (ext.FLOAT) float = ex.FLOAT;
+    }
     return {
       'byte': gl.UNSIGNED_BYTE,
-      'float': gl.FLOAT,
+      'float': float,
+      'half-float': halfFloat,
     }[this._precision];
   }
 
