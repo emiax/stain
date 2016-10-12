@@ -58,60 +58,44 @@ class ImageStainBrush {
   }
 
   
-  apply(brushSize, amount) {
+  apply(position, brushSize, amount) {
     let intensity = Math.random();
-    let size = this._simulator.size();
-    //let color = [intensity, Math.min(1.0, intensity * 1.2), Math.min(1.0, intensity * 2.0)];
-    let color = [];
-    let rand = Math.random();
-    if (rand < 0.33) {
-      color = [0, Math.random(), 0]//[Math.min(1.0, intensity * 1.2), Math.min(1.0, intensity * 1.2), Math.min(1.0, intensity * 0.0)];
-    } else if (rand < 0.67) {
-      color = [Math.random(), 0, 0];
-    } else {
-      color = [1, 1, 1];
+    let canvasSize = this._simulator.size();
+
+    let stainPositions = [];
+    let stainSizes = [];
+
+    let nStains = 10;
+    for (let i = 0; i < nStains; i++) {
+
+      let r = Math.random() * brushSize;
+      let x = position[0] * canvasSize[0];
+      let y = position[1] * canvasSize[1];
+
+      if (r > brushSize * 0.5) {
+        // bigger stains close to the center.
+        x += 3 * brushSize * (Math.random() - 0.5);
+        y += 3 * brushSize * (Math.random() - 0.5);
+      } else {
+        // smaller stains more scattered.
+        x += 10 * brushSize * (Math.random() - 0.5);
+        y += 10 * brushSize * (Math.random() - 0.5);
+      }
+
+      stainPositions.push(x);
+      stainPositions.push(y);
+      stainSizes.push(r);
     }
 
-   // console.log(this._inputTexture);
-   let stainPositions = [];
-   let stainSizes = [];
-
-   let inputX = 0.01 + Math.random() * 0.98;
-   let inputY = 0.1 + Math.random() * 0.8;
-
-   let nStains = 10;
-   for (let i = 0; i < nStains; i++) {
-
-    let r = Math.random() * brushSize;
-    let x = inputX * size[0];
-    let y = inputY * size[1];
-
-    if (r > brushSize * 0.5) {
-      // bigger stains close to the center.
-      x += 3 * brushSize * (Math.random() - 0.5);
-      y += 3 * brushSize * (Math.random() - 0.5);
-    } else {
-      // smaller stains more scattered.
-      x += 10 * brushSize * (Math.random() - 0.5);
-      y += 10 * brushSize * (Math.random() - 0.5);
-    }
-
-    stainPositions.push(x);
-    stainPositions.push(y);
-    stainSizes.push(r);
-   }
-
-   let typedStainPositions = new Float32Array(stainPositions);
-   let typedStainSizes = new Float32Array(stainSizes);
+    let typedStainPositions = new Float32Array(stainPositions);
+    let typedStainSizes = new Float32Array(stainSizes);
 
     this._brush.apply({
-      //splatPosition: [size[0] * x, size[1] * y],
       splatWater: Math.random() * amount,
       splatSize: brushSize,
       stainSizes: typedStainSizes,
-      inputPosition: [inputX, inputY],
+      inputPosition: [position[0], position[1]],
       stainPositions: typedStainPositions,
-      //splatColor: color,
       concentration: Math.random() * amount * 5.0,
       inputTexture: this._inputTexture
     });

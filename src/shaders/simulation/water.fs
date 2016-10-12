@@ -23,7 +23,7 @@ float advectionFactor(float water) {
 
 float diffusion(float waterA, float waterB) {
   //return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
-  return waterA * waterB;
+  return min(waterA * waterB, 0.25);
 }
 
 void main() {
