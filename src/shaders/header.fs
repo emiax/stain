@@ -53,7 +53,8 @@ void main() {
   vec4 bg1 = vec4(1.0, 1.0, 1.0, 1.0);
   vec4 bg2 = vec4(0.05, 0.05, 0.05, 1.0);
 
-  vec4 bg = vec4(0.98, 0.98, 0.98, 1.0);
+  //vec4 bg = vec4(0.98, 0.98, 0.98, 1.0);
+  vec4 bg = vec4(0.01, 0.01, 0.01, 1.0);
 
   //vec4 bg = vec4(0.0, 0.0, 0.0, 1.0);
   vec4 waterContribution = vec4(1.0, 1.0, 1.0, diff);
