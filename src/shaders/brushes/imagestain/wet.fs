@@ -20,7 +20,6 @@ vec4 addWet(vec4 a, vec4 b) {
 }
 
 void main() {
-
   vec4 inputSample = texture2D(inputTexture, vec2(inputPosition.x, 1.0 - inputPosition.y));
   vec3 color = inputSample.rgb;
   float dryCoefficient = inputSample.a;

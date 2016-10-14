@@ -9,7 +9,7 @@ float splat() {
   float minNormalizedDistance = 10000000.0;
   int closestIndex = 0;
   vec2 closestPosition = vec2(0.0, 0.0);
-  float closestStainSize = 0.0;
+  float closestStainSize = 0.01;
 
   for (int i = 0; i < 10; i++) {
     vec2 pos = stainPositions[i];

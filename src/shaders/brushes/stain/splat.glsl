@@ -1,16 +1,32 @@
-float splat(vec2 pixelCoords, vec2 pos, float size) {
+uniform vec2 stainPositions[10];
+uniform float stainSizes[10];
 
-  float d = 10000000.0;
-  //float closest = vec2();
+varying vec2 pixelCoordinates;
+//uniform float splatSize;
+
+float splat() {
+
+  float minNormalizedDistance = 10000000.0;
+  int closestIndex = 0;
+  vec2 closestPosition = vec2(0.0, 0.0);
+  float closestStainSize = 0.01;
+
   for (int i = 0; i < 10; i++) {
-  	vec2 manipulatedPos = pos + 100.0 * vec2(snoise(pos + vec2(float(i))), 
-  	                                        snoise(pos - vec2(float(i))));
-  	d = min(distance(pixelCoords, manipulatedPos), d);
-
+    vec2 pos = stainPositions[i];
+    float size = stainSizes[i];
+    //float size = stainSizes[i];
+    float currentNormalizedDistance = length((pixelCoordinates - pos) / size);
+    if (currentNormalizedDistance < minNormalizedDistance) {
+        closestIndex = i;
+        minNormalizedDistance = min(currentNormalizedDistance, minNormalizedDistance);
+        closestPosition = pos;
+        closestStainSize = size;
+    }
   }
 
+  vec2 centerOffset = closestPosition - pixelCoordinates;
+  float len = length(centerOffset);
+  len += (len * 0.5) * snoise(pixelCoordinates / closestStainSize * 0.5);
 
-  //float d = distance(pixelCoords, pos);
-  d += size * 0.3 * snoise(pixelCoords * (1.0 / size));
-  return smoothstep(size, size * 0.5, d) * 0.5;
+  return smoothstep(closestStainSize, closestStainSize * 0.5, len);
 }

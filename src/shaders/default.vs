@@ -6,9 +6,6 @@ varying vec2 pixelCoordinates;
 varying vec2 textureCoordinates;
 varying vec2 vertexCoordinates;
 
-
-
-
 void main() {
   vertexCoordinates = vertexCoord;
   textureCoordinates = vertexCoordinates * 0.5 + 0.5;

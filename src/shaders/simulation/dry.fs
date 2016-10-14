@@ -25,6 +25,11 @@ vec4 blend(vec4 contrib, vec4 background) {
 
 
 vec4 dryOut(vec4 wetIn) {
+  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
+  return wetIn * (1.0 - ds);
+}
+
+/*
   float amountIn = wetIn.a;
   float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
   float amountOut = max(0.0, amountIn - ds);
@@ -34,7 +39,7 @@ vec4 dryOut(vec4 wetIn) {
   } else {
     return wetIn;
   }
-}
+}*/
 
 void main() { 
   

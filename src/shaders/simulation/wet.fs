@@ -17,6 +17,11 @@ float advectionFactor(float water) {
 }
 
 vec4 dryOut(vec4 wetIn) {
+  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
+  return wetIn * (1.0 - ds);
+}
+
+/*
   float amountIn = wetIn.a;
   float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
   float amountOut = max(0.0, amountIn - ds);
@@ -26,7 +31,7 @@ vec4 dryOut(vec4 wetIn) {
   } else {
     return wetIn;
   }
-}
+}*/
 
 float diffusion(float waterA, float waterB) {
   //return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
