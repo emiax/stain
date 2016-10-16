@@ -71,6 +71,7 @@ class DefaultRenderer {
     let textures = simulator.currentOutputTextures();
     this._shaderPass.setUniform('wet', textures['wet']);
     this._shaderPass.setUniform('dry', textures['dry']);
+    //this._shaderPass.setUniform('water', textures['water']);
     this._shaderPass.setUniform('backgroundColor', this._backgroundColor);
     this._shaderPass.setUniform('texturePixelSize', [1/this._textureSize[0], 1/this._textureSize[1]]);
     this._shaderPass.apply();

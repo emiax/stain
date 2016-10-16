@@ -3,6 +3,7 @@ uniform float stainSizes[10];
 
 varying vec2 pixelCoordinates;
 //uniform float splatSize;
+uniform float fuzziness;
 
 float splat() {
 
@@ -29,7 +30,7 @@ float splat() {
 
   //offsetFromCenter = stainSizes[i] * 0.3 * snoise(pixelCoordinates * (vec2(1.0, 1.0) / stainSizes[i]));
   float len = length(centerOffset);
-  len += (len * 0.5) * snoise(pixelCoordinates / closestStainSize * 0.5);
+  len += fuzziness * len * snoise(pixelCoordinates / closestStainSize * 1.0);
   //closestStainSize = clo;
   //closestStainSize = 20.0;
 

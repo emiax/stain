@@ -59,7 +59,6 @@ class ImageStainBrush {
 
   
   apply(position, brushSize, amount) {
-    let intensity = Math.random();
     let canvasSize = this._simulator.size();
 
     let stainPositions = [];
@@ -97,7 +96,8 @@ class ImageStainBrush {
       inputPosition: [position[0], position[1]],
       stainPositions: typedStainPositions,
       concentration: Math.random() * amount * 5.0,
-      inputTexture: this._inputTexture
+      inputTexture: this._inputTexture,
+      fuzziness: 0.4
     });
   }
 }

@@ -8,7 +8,7 @@ import vsSource from '../shaders/brushes/stain/brush.vs';
 import waterFsSource from '../shaders/brushes/stain/water.fs';
 import wetFsSource from '../shaders/brushes/stain/wet.fs';
 import dryFsSource from '../shaders/brushes/stain/dry.fs';
-import splat from '../shaders/brushes/imagestain/splat.glsl';
+import splat from '../shaders/brushes/stain/splat.glsl';
 
 import glslPre from '../glslpreprocessor';
 
@@ -50,7 +50,11 @@ class StainBrush {
   }
 
 
-  apply(position, brushSize, amount, color) {
+  apply(position, brushSize, amount, concentration, fuzziness) {
+    if (fuzziness === undefined) {
+      fuzziness = 0.3 + Math.random() * 0.2;
+    }
+
     let intensity = Math.random();
     let canvasSize = this._simulator.size();
 
@@ -83,13 +87,14 @@ class StainBrush {
     let typedStainSizes = new Float32Array(stainSizes);
 
     this._brush.apply({
-      splatWater: Math.random() * amount * 0.5,
+      splatWater: amount * 0.5 * amount,
       splatSize: brushSize,
       stainSizes: typedStainSizes,
       inputPosition: [position[0], position[1]],
       stainPositions: typedStainPositions,
-      concentration: Math.random() * amount * 5.0,
-      color: this._color
+      concentration: amount * 5.0 * concentration,
+      color: this._color,
+      fuzziness: fuzziness
     });
   }
 }

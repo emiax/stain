@@ -18,8 +18,7 @@ uniform vec3 backgroundColor;
  */
 vec4 blend(vec4 contrib, vec4 background) {
   vec4 result = vec4(0.0);
-    result.rgb = contrib.rgb + (1.0 - contrib.a) * background.rgb;
-    result.a = contrib.a + (1.0 - contrib.a) * background.a;
+    result = contrib + (1.0 - contrib.a) * background;
     return result;
 }
 
