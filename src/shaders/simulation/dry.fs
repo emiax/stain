@@ -1,7 +1,12 @@
+// r: water amount
+// g: evaporation speed
+// b: drying speed
+// w: reserved for future use
+uniform sampler2D water;
 uniform sampler2D wet;
 uniform sampler2D dry;
 
-uniform float dryingSpeed;
+// uniform float dryingSpeed;
 
 uniform vec2 pixelSize;
 varying vec2 gravity;
@@ -24,7 +29,7 @@ vec4 blend(vec4 contrib, vec4 background) {
 
 
 
-vec4 dryOut(vec4 wetIn) {
+vec4 dryOut(vec4 wetIn, float dryingSpeed) {
   float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
   return wetIn * (1.0 - ds);
 }
@@ -41,13 +46,12 @@ vec4 dryOut(vec4 wetIn) {
   }
 }*/
 
-void main() { 
-  
-
+void main() {
+  float dryingSpeed = texture2D(water, textureCoordinates).b;
   vec4 wetSample = texture2D(wet, textureCoordinates);
   vec4 drySample = texture2D(dry, textureCoordinates);
 
-  vec4 remainingWet = dryOut(wetSample);
+  vec4 remainingWet = dryOut(wetSample, dryingSpeed);
   vec4 dried = wetSample - remainingWet;
   dried = clamp(dried, vec4(0.0), vec4(1.0));
   drySample = clamp(drySample, vec4(0.0), vec4(1.0));

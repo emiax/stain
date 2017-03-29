@@ -27,12 +27,8 @@ float splat() {
 
   vec2 centerOffset = closestPosition - pixelCoordinates;
 
-
-  //offsetFromCenter = stainSizes[i] * 0.3 * snoise(pixelCoordinates * (vec2(1.0, 1.0) / stainSizes[i]));
   float len = length(centerOffset);
-  len += fuzziness * len * snoise(pixelCoordinates / closestStainSize * 1.0);
-  //closestStainSize = clo;
-  //closestStainSize = 20.0;
+  len += fuzziness * len * snoise(pixelCoordinates / closestStainSize * 1.0); 
 
   return smoothstep(closestStainSize, closestStainSize * 0.5, len);
 }

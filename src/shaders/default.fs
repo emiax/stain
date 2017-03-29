@@ -40,7 +40,7 @@ void main() {
   }
 
   vec4 result = blend(bg, vec4(0.0));
-  result = blend(0.75 * dryContribution, result);
+  result = blend(0.0 * dryContribution, result);
   result = blend(wetContribution, result);
 
   gl_FragColor = result;

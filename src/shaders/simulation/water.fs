@@ -1,7 +1,12 @@
+// water texture:
+// r: water amount
+// g: evaporation speed
+// b: drying speed
+// w: reserved for future use
 uniform sampler2D water;
 
-uniform float dryingSpeed;
-uniform float evaporationSpeed;
+//uniform float dryingSpeed;
+//uniform float evaporationSpeed;
 uniform float diffusionFactor;
 
 uniform vec2 pixelSize;
@@ -9,35 +14,36 @@ varying vec2 gravity;
 varying vec2 textureCoordinates;
 
 
-
-
-float evaporate(float waterIn, vec2 coords) {
+float evaporate(float waterIn, vec2 coords, float evaporationSpeed) {
   float waterOut = max(0.0, waterIn - evaporationSpeed);
   return waterOut;
 }
 
 float advectionFactor(float water) {
-  //water = clamp(water, 0.0, 1.0);
   return smoothstep(0.2, 0.8, water) * 0.8;
 }
 
 float diffusion(float waterA, float waterB) {
-  //return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
   return min(waterA * waterB, 0.25);
 }
 
 void main() {
   vec2 displacement = pixelSize * gravity;
   
-  float waterSampleHere = texture2D(water, textureCoordinates).r;
-  float waterSampleAbove = texture2D(water, textureCoordinates - displacement).r;
+  vec4 waterTextureSampleHere = texture2D(water, textureCoordinates);
+  vec4 waterTextureSampleAbove = texture2D(water, textureCoordinates - displacement);
 
-  float waterHere = evaporate(waterSampleHere, textureCoordinates);
-  float waterAbove = evaporate(waterSampleAbove, textureCoordinates);
+  float waterSampleHere = waterTextureSampleHere.r;
+  float waterSampleAbove = waterTextureSampleAbove.r;
+
+  float evaporationSpeed = waterTextureSampleHere.g;
+  float dryingSpeed = waterTextureSampleHere.b;
+
+  float waterHere = evaporate(waterSampleHere, textureCoordinates, evaporationSpeed);
+  float waterAbove = evaporate(waterSampleAbove, textureCoordinates, evaporationSpeed);
 
   float waterAmount = waterHere * (1.0 - advectionFactor(waterHere))
                     + waterAbove * advectionFactor(waterAbove);
-
 
   float left = texture2D(water, textureCoordinates + pixelSize * vec2(-1.0, 0.0)).r;
   float right = texture2D(water, textureCoordinates + pixelSize * vec2(1.0, 0.0)).r;
@@ -62,5 +68,5 @@ void main() {
   waterAmount = max(0.0, waterAmount);
   waterAmount = min(0.5, waterAmount);
 
-  gl_FragColor = vec4(waterAmount, 0.0, 0.0, 0.0);
+  gl_FragColor = vec4(waterAmount, waterTextureSampleHere.gba);
 }

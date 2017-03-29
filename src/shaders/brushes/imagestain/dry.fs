@@ -2,7 +2,6 @@ uniform sampler2D water;
 uniform sampler2D wet;
 uniform sampler2D dry;
 
-
 varying vec2 textureCoordinates;
 
 void main() {

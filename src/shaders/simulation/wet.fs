@@ -1,7 +1,13 @@
+// water texture:
+// r: water amount
+// g: evaporation speed
+// b: drying speed
+// w: reserved for future use
 uniform sampler2D water;
+
 uniform sampler2D wet;
 
-uniform float dryingSpeed;
+//uniform float dryingSpeed;
 uniform float diffusionFactor;
 
 uniform vec2 pixelSize;
@@ -12,36 +18,19 @@ varying vec2 pixelCoordinates;
 uniform float time;
 
 float advectionFactor(float water) {
-  //water = clamp(water, 0.0, 1.0);
   return smoothstep(0.2, 0.8, water) * 0.8;
 }
 
-vec4 dryOut(vec4 wetIn) {
+vec4 dryOut(vec4 wetIn, float dryingSpeed) {
   float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
   return wetIn * (1.0 - ds);
 }
 
-/*
-  float amountIn = wetIn.a;
-  float ds = dryingSpeed * (0.7 + 0.3 * snoise(pixelCoordinates * 0.5));
-  float amountOut = max(0.0, amountIn - ds);
-  if (amountIn > 0.0) {
-    float remainFactor = amountOut / amountIn;
-    return wetIn * remainFactor;
-  } else {
-    return wetIn;
-  }
-}*/
-
 float diffusion(float waterA, float waterB) {
-  //return smoothstep(0.0, 1.0, waterA) * smoothstep(0.0, 1.0, waterB);
   return min(waterA * waterB, 0.25);
 }
 
 vec4 addWet(vec4 a, vec4 b) {
-  //float concentration = a.a + b.a;
-  //vec3 pigment = (a.rgb * a.a + b.rgb * b.a) / concentration;
-  //return vec4(pigment, concentration);
   return a + b;
 }
 
@@ -49,17 +38,22 @@ void main() {
  
   vec2 displacement = pixelSize * gravity;
   
+    
+  vec4 waterTextureSampleHere = texture2D(water, textureCoordinates);
+  vec4 waterTextureSampleAbove = texture2D(water, textureCoordinates - displacement);
 
-  float waterSampleHere = texture2D(water, textureCoordinates).r;
-  float waterSampleAbove = texture2D(water, textureCoordinates - displacement).r;
+  float waterSampleHere = waterTextureSampleHere.r;
+  float waterSampleAbove = waterTextureSampleAbove.r;
+
+  float dryingSpeed = waterTextureSampleHere.b;
 
   vec4 wetSampleHere = texture2D(wet, textureCoordinates);
   vec4 wetSampleAbove = texture2D(wet, textureCoordinates - displacement);
 
 
   float waterAmount = waterSampleHere;
-  vec4 wetSampleFromHere = dryOut(wetSampleHere); 
-  vec4 wetSampleFromAbove = dryOut(wetSampleAbove);
+  vec4 wetSampleFromHere = dryOut(wetSampleHere, dryingSpeed); 
+  vec4 wetSampleFromAbove = dryOut(wetSampleAbove, dryingSpeed);
   
   wetSampleFromHere *= (1.0 - advectionFactor(waterSampleHere));
   wetSampleFromAbove *= advectionFactor(waterSampleAbove);

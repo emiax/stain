@@ -7,6 +7,8 @@ import ShaderPass from './shaderPass';
 import Buffer from './buffer';
 import glslPre from './glslpreprocessor';
 
+import ClearBrush from './brushes/clearBrush';
+
 import noise2D from '../ext/webgl-noise/src/noise2D.glsl';
 import vsSource from './shaders/simulation/simulation.vs';
 import waterFsSource from './shaders/simulation/water.fs';
@@ -37,7 +39,8 @@ class Simulator {
             this.setupTexturesAndFramebuffers('half-float') ||
             this.setupTexturesAndFramebuffers('byte')) &&
            this.setupShaders() &&
-           this.setupShaderPasses();
+           this.setupShaderPasses() && 
+           this.clearCanvas();
   }
 
   setupShaders() {
@@ -129,6 +132,19 @@ class Simulator {
     return true;
   }
 
+  clearCanvas() {
+    const clearBrush = new ClearBrush({
+      context: this._context,
+      simulator: this
+    });
+    clearBrush.apply({
+      dryingSpeed: 0.01,
+      //dryingSpeed: 0.002,
+      evaporationSpeed: 0.001,
+    });
+    return true;
+  }
+
   createShaderPass(pingPong, component) {
     let textures = this._textureSets;
     let framebuffers = this._framebufferSets;
@@ -148,8 +164,8 @@ class Simulator {
         wet: textures[pingPong].wet,
         dry: textures[pingPong].dry,
         pixelSize: [1/this._size[0], 1/this._size[1]],
-        dryingSpeed: 0.002,
-        evaporationSpeed: 0.001,
+        // dryingSpeed: 0.002,
+        // evaporationSpeed: 0.001,
         diffusionFactor: 0.2,
         time: 0
       },
@@ -179,7 +195,6 @@ class Simulator {
   }
 
   step() {
-    
     let pingPong = this._pingPong;
     Object.keys(this._shaderPasses[pingPong]).forEach((component) => {
       let shaderPass = this._shaderPasses[pingPong][component];

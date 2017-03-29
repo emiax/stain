@@ -1,23 +1,25 @@
 import Brush from './brush';
 import EventEmitter from '../eventemitter';
 
-import vsSource from '../shaders/brushes/clear/brush.vs';
-import waterFsSource from '../shaders/brushes/clear/water.fs';
-import colorFsSource from '../shaders/brushes/clear/color.fs';
+import vsSource from '../shaders/brushes/speed/brush.vs';
+import waterFsSource from '../shaders/brushes/speed/water.fs';
+import wetFsSource from '../shaders/brushes/speed/wet.fs';
+import dryFsSource from '../shaders/brushes/speed/dry.fs';
 
 import glslPre from '../glslpreprocessor';
 
-export default class ClearBrush {
+export default class SpeedBrush {
   constructor(opt) {
     let waterFs = glslPre(waterFsSource);
-    let colorFs = glslPre(colorFsSource);
+    let wetFs = glslPre(wetFsSource);
+    let dryFs = glslPre(dryFsSource);
     this._brush = new Brush({
       simulator: opt.simulator,
       vsSource: glslPre(vsSource),
       fsSources: {
         water: waterFs,
-        wet: colorFs,
-        dry: colorFs
+        wet: wetFs,
+        dry: dryFs
       }
     });
     this._simulator = opt.simulator;
