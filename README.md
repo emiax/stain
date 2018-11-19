@@ -1,4 +1,4 @@
-#Stains
+# Stains
 Stains is a JavaScript/WebGL library that I created to mimic the
 visual appearance and behaviour of aquarelle on a canvas. The library, which can
 procedurally generate aquarelle paintings is used to create
@@ -8,7 +8,7 @@ but I also think it is an interesting proof-of-concept for a style of computer g
 that could be used in other contexts, such as digital storytelling,
 computer games, VJing or other forms of interactive art.
 
-#License
+# License
 
 Copyright (c) 2016 Emil Axelsson
 
